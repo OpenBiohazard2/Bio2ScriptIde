@@ -9,7 +9,7 @@ use std::collections::HashMap;
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct TemplateApp {
     opcode_documentation: HashMap<String, String>,
-    picked_path: Option<String>,
+    picked_path: String,
     code_string: Vec<String>,
     code_string_init: Vec<String>,
     code_string_main: Vec<String>,
@@ -24,7 +24,7 @@ impl Default for TemplateApp {
     fn default() -> Self {
         Self {
             opcode_documentation: init_opcode_documentation(),
-            picked_path: Option::None,
+            picked_path: "".to_owned(),
             code_string: Vec::new(),
             code_string_init: Vec::new(),
             code_string_main: Vec::new(),
@@ -88,7 +88,8 @@ impl eframe::App for TemplateApp {
                     if ui.button("Open file…").clicked() {
                         if let Some(path) = rfd::FileDialog::new().pick_file() {
                             let filename = path.display().to_string();
-                            self.picked_path = Some(filename.clone());
+                            self.picked_path =
+                                path.file_stem().unwrap().to_str().unwrap().to_string();
 
                             let contents = read_file(filename);
                             let header =
@@ -148,7 +149,7 @@ impl eframe::App for TemplateApp {
 
         egui::CentralPanel::default().show(ctx, |ui| {
             // The central panel the region left after adding TopPanel's and SidePanel's
-            ui.heading("Source code");
+            ui.heading(format!("Source code for {}", self.picked_path));
             egui::warn_if_debug_build(ui);
 
             egui::ScrollArea::vertical().show(ui, |ui| {
