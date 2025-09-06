@@ -1,3 +1,4 @@
+#[allow(dead_code)]
 pub struct RDTHeader {
     pub num_sprites: u8,
     pub num_cameras: u8,
@@ -12,31 +13,45 @@ pub struct RDTHeader {
 
 impl RDTHeader {
     pub fn from(v: &[u8]) -> Result<RDTHeader, &'static str> {
-        if v.len() < 8 {
-            return Err::<RDTHeader, &str>("invalid header length");
+        const HEADER_SIZE: usize = 8;
+        const OFFSET_COUNT: usize = 23;
+        const OFFSET_SIZE: usize = 4;
+        const TOTAL_OFFSET_SIZE: usize = OFFSET_COUNT * OFFSET_SIZE;
+        const MIN_FILE_SIZE: usize = HEADER_SIZE + TOTAL_OFFSET_SIZE;
+
+        if v.len() < MIN_FILE_SIZE {
+            return Err("File too small: expected at least 100 bytes for RDT header");
         }
 
-        let header = &v[0..8];
+        let header = &v[0..HEADER_SIZE];
+        let rdt_offsets_bytes = &v[HEADER_SIZE..HEADER_SIZE + TOTAL_OFFSET_SIZE];
 
-        let offset_length = 23 * 4;
-        let rdt_offsets_bytes = &v[8..8 + offset_length];
-
-        let mut rdt_offsets = [0; 23];
-        let mut i = 0;
-        for x in rdt_offsets_bytes.chunks(4) {
-            rdt_offsets[i] = u32::from_le_bytes([x[0], x[1], x[2], x[3]]);
-            i += 1;
+        let mut rdt_offsets = [0; OFFSET_COUNT];
+        for (i, chunk) in rdt_offsets_bytes.chunks(OFFSET_SIZE).enumerate() {
+            if chunk.len() != OFFSET_SIZE {
+                return Err("Invalid offset data: incomplete offset entry");
+            }
+            rdt_offsets[i] = u32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]);
         }
+
+        let num_sprites = header[0];
+        let num_cameras = header[1];
+        let num_models = header[2];
+        let num_items = header[3];
+        let num_doors = header[4];
+        let num_rooms = header[5];
+        let num_reverb = header[6];
+        let sprite_max = header[7];
 
         Ok(RDTHeader {
-            num_sprites: header[0],
-            num_cameras: header[1],
-            num_models: header[2],
-            num_items: header[3],
-            num_doors: header[4],
-            num_rooms: header[5],
-            num_reverb: header[6],
-            sprite_max: header[7],
+            num_sprites,
+            num_cameras,
+            num_models,
+            num_items,
+            num_doors,
+            num_rooms,
+            num_reverb,
+            sprite_max,
             offsets: rdt_offsets,
         })
     }

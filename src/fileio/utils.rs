@@ -3,18 +3,21 @@ use std::io::Read;
 use std::path::Path;
 
 // general function for any file type
-pub fn read_file(mut file_name: String) -> Vec<u8> {
+pub fn read_file(mut file_name: String) -> Result<Vec<u8>, String> {
     file_name = file_name.replace("/", "");
     if file_name.is_empty() {
-        file_name = String::from("index.html");
+        return Err("No file specified".to_string());
     }
 
     let path = Path::new(&file_name);
     if !path.exists() {
-        return String::from("Not Found!").into();
+        return Err(format!("File not found: {}", file_name));
     }
+    
     let mut file_content = Vec::new();
-    let mut file = File::open(&file_name).expect("Unable to open file");
-    file.read_to_end(&mut file_content).expect("Unable to read");
-    file_content
+    let mut file = File::open(&file_name)
+        .map_err(|e| format!("Unable to open file '{}': {}", file_name, e))?;
+    file.read_to_end(&mut file_content)
+        .map_err(|e| format!("Unable to read file '{}': {}", file_name, e))?;
+    Ok(file_content)
 }
