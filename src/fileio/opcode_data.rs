@@ -866,6 +866,8 @@ pub fn init_opcode_documentation() -> HashMap<String, String> {
             &"Initialize animated entity".to_string()),
         (OPCODE_AOT_SET4P.to_string(), "AotSet4p(aot: u8, id: u8, type: u8, floor: u8, super: u8, x1: i16, z1: i16, x2: i16, z2: i16, x3: i16, z3: i16, x4: i16, z4: i16, data: u8[6])\n".to_owned() +
             &"Initialize aot object with 4 points".to_string()),
+        (OPCODE_NO_OP.to_string(), "NoOp()\n".to_owned() +
+            &"No operation".to_string()),
         (OPCODE_EVT_END.to_string(), "EvtEnd()\n".to_owned() +
             &"End event execution".to_string()),
         (OPCODE_EVT_NEXT.to_string(), "EvtNext()\n".to_owned() +
@@ -876,13 +878,13 @@ pub fn init_opcode_documentation() -> HashMap<String, String> {
             &"Execute another event".to_string()),
         (OPCODE_EVT_KILL.to_string(), "EvtKill(param1: u8)\n".to_owned() +
             &"Kill an event".to_string()),
-        (OPCODE_IF_START.to_string(), "IfStart(param1: u8, param2: u16)\n".to_owned() +
+        (OPCODE_IF_START.to_string(), "IfStart(dummy: u8, block_length: u16)\n".to_owned() +
             &"Start conditional block".to_string()),
-        (OPCODE_ELSE_START.to_string(), "ElseStart(param1: u8, param2: u16)\n".to_owned() +
+        (OPCODE_ELSE_START.to_string(), "ElseStart(dummy: u8, block_length: u16)\n".to_owned() +
             &"Start else block".to_string()),
         (OPCODE_END_IF.to_string(), "EndIf()\n".to_owned() +
             &"End conditional block".to_string()),
-        (OPCODE_SLEEP.to_string(), "Sleep(param1: u8, param2: u16)\n".to_owned() +
+        (OPCODE_SLEEP.to_string(), "Sleep(dummy: u8, count: u16)\n".to_owned() +
             &"Sleep for specified time".to_string()),
         (OPCODE_SLEEPING.to_string(), "Sleeping(param1: u8, param2: u8)\n".to_owned() +
             &"Check if sleeping".to_string()),
@@ -890,7 +892,7 @@ pub fn init_opcode_documentation() -> HashMap<String, String> {
             &"Wait sleep".to_string()),
         (OPCODE_WSLEEPING.to_string(), "Wsleeping()\n".to_owned() +
             &"Check if wait sleeping".to_string()),
-        (OPCODE_FOR_START.to_string(), "ForStart(param1: u8, param2: u16, param3: u16)\n".to_owned() +
+        (OPCODE_FOR_START.to_string(), "ForStart(dummy: u8, block_length: u16, count: u16)\n".to_owned() +
             &"Start for loop".to_string()),
         (OPCODE_FOR_END.to_string(), "ForEnd(param1: u8)\n".to_owned() +
             &"End for loop".to_string()),
@@ -902,35 +904,35 @@ pub fn init_opcode_documentation() -> HashMap<String, String> {
             &"Start do-while loop".to_string()),
         (OPCODE_DO_END.to_string(), "DoEnd(param1: u8)\n".to_owned() +
             &"End do-while loop".to_string()),
-        (OPCODE_SWITCH.to_string(), "Switch(param1: u8, param2: u16)\n".to_owned() +
+        (OPCODE_SWITCH.to_string(), "Switch(var_id: u8, block_length: u16)\n".to_owned() +
             &"Start switch statement".to_string()),
-        (OPCODE_CASE.to_string(), "Case(param1: u8, param2: u16, param3: u16)\n".to_owned() +
+        (OPCODE_CASE.to_string(), "Case(dummy: u8, block_length: u16, value: u16)\n".to_owned() +
             &"Case in switch statement".to_string()),
         (OPCODE_END_SWITCH.to_string(), "EndSwitch(param1: u8)\n".to_owned() +
             &"End switch statement".to_string()),
-        (OPCODE_GOTO.to_string(), "Goto(param1: i8, param2: i8, param3: u8, param4: i16)\n".to_owned() +
+        (OPCODE_GOTO.to_string(), "Goto(if_else_counter: i8, loop_level: i8, unknown: u8, offset: i16)\n".to_owned() +
             &"Jump to label".to_string()),
-        (OPCODE_GO_SUB.to_string(), "GoSub(param1: u8)\n".to_owned() +
+        (OPCODE_GO_SUB.to_string(), "GoSub(event: u8)\n".to_owned() +
             &"Call subroutine".to_string()),
         (OPCODE_BREAK.to_string(), "Break(param1: u8)\n".to_owned() +
             &"Break from loop/switch".to_string()),
         (OPCODE_WORK_COPY.to_string(), "WorkCopy(param1: u8, param2: u8, param3: u8)\n".to_owned() +
             &"Copy work values".to_string()),
-        (OPCODE_CHECK_BIT.to_string(), "CheckBit(param1: u8, param2: u8, param3: u8)\n".to_owned() +
+        (OPCODE_CHECK_BIT.to_string(), "CheckBit(bit_array: u8, bit_number: u8, value: u8)\n".to_owned() +
             &"Check bit flag".to_string()),
-        (OPCODE_SET_BIT.to_string(), "SetBit(param1: u8, param2: u8, param3: u8)\n".to_owned() +
+        (OPCODE_SET_BIT.to_string(), "SetBit(bit_array: u8, bit_number: u8, operation: u8)\n".to_owned() +
             &"Set bit flag".to_string()),
-        (OPCODE_COMPARE.to_string(), "Compare(param1: u8, param2: u8, param3: u8, param4: i16)\n".to_owned() +
+        (OPCODE_COMPARE.to_string(), "Compare(dummy: u8, var_id: u8, operation: u8, value: i16)\n".to_owned() +
             &"Compare values".to_string()),
-        (OPCODE_SAVE.to_string(), "Save(param1: u8, param2: i16)\n".to_owned() +
+        (OPCODE_SAVE.to_string(), "Save(var_id: u8, value: i16)\n".to_owned() +
             &"Save value".to_string()),
-        (OPCODE_COPY.to_string(), "Copy(param1: u8, param2: u8)\n".to_owned() +
+        (OPCODE_COPY.to_string(), "Copy(dest_var_id: u8, source_var_id: u8)\n".to_owned() +
             &"Copy value".to_string()),
-        (OPCODE_CALC.to_string(), "Calc(param1: u8, param2: u8, param3: u8, param4: i16)\n".to_owned() +
+        (OPCODE_CALC.to_string(), "Calc(dummy: u8, operation: u8, var_id: u8, value: i16)\n".to_owned() +
             &"Calculate expression".to_string()),
         (OPCODE_SCE_RND.to_string(), "SceRnd()\n".to_owned() +
             &"Generate random number".to_string()),
-        (OPCODE_CUT_CHG.to_string(), "CutChg(param1: u8)\n".to_owned() +
+        (OPCODE_CUT_CHG.to_string(), "CutChg(camera_id: u8)\n".to_owned() +
             &"Change cutscene".to_string()),
         (OPCODE_CUT_OLD.to_string(), "CutOld()\n".to_owned() +
             &"Restore old cutscene".to_string()),
@@ -938,7 +940,7 @@ pub fn init_opcode_documentation() -> HashMap<String, String> {
             &"Display message".to_string()),
         (OPCODE_OBJ_MODEL_SET.to_string(), "ObjModelSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u16, param9: u16, param10: i16, param11: i16, param12: i16, param13: i16, param14: i16, param15: i16, param16: i16, param17: i16, param18: i16, param19: i16, param20: i16, param21: u16, param22: u16, param23: u16)\n".to_owned() +
             &"Set object model".to_string()),
-        (OPCODE_WORK_SET.to_string(), "WorkSet(param1: u8, param2: u8)\n".to_owned() +
+        (OPCODE_WORK_SET.to_string(), "WorkSet(component: u8, index: u8)\n".to_owned() +
             &"Set work value".to_string()),
         (OPCODE_SPEED_SET.to_string(), "SpeedSet(param1: u8, param2: u8, param3: u8)\n".to_owned() +
             &"Set speed".to_string()),
@@ -948,13 +950,13 @@ pub fn init_opcode_documentation() -> HashMap<String, String> {
             &"Add to angular speed".to_string()),
         (OPCODE_DIR_SET.to_string(), "DirSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8)\n".to_owned() +
             &"Set direction".to_string()),
-        (OPCODE_MEMBER_SET.to_string(), "MemberSet(param1: u8, param2: u16)\n".to_owned() +
+        (OPCODE_MEMBER_SET.to_string(), "MemberSet(member_index: u8, value: u16)\n".to_owned() +
             &"Set member value".to_string()),
         (OPCODE_MEMBER_SET2.to_string(), "MemberSet2(param1: u8, param2: u8)\n".to_owned() +
             &"Set member value (variant 2)".to_string()),
         (OPCODE_SE_ON.to_string(), "SeOn(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u8, param9: u8, param10: u8, param11: u8)\n".to_owned() +
             &"Play sound effect".to_string()),
-        (OPCODE_SCA_ID_SET.to_string(), "ScaIdSet(param1: u8, param2: u16)\n".to_owned() +
+        (OPCODE_SCA_ID_SET.to_string(), "ScaIdSet(id: u8, flag: u16)\n".to_owned() +
             &"Set scale ID".to_string()),
         (OPCODE_DIR_CK.to_string(), "DirCk(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8)\n".to_owned() +
             &"Check direction".to_string()),
