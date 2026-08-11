@@ -49,7 +49,7 @@ fn parse_bytes_by_type(data: &[u8], type_suffix: &str) -> Result<Vec<i32>, Strin
         },
         "i32" => {
             Ok(data.chunks_exact(4)
-                .map(|chunk| i32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]) as i32)
+                .map(|chunk| i32::from_le_bytes([chunk[0], chunk[1], chunk[2], chunk[3]]))
                 .collect())
         },
         _ => Err(format!("Unknown type suffix: {}", type_suffix)),

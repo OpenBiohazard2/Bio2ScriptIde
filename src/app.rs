@@ -95,7 +95,7 @@ impl TemplateApp {
 
     /// Updates toast timer and clears when expired
     fn update_toast(&mut self, delta_time: f32) {
-        if let Some(_) = self.ui_state.toast_message {
+        if self.ui_state.toast_message.is_some() {
             self.ui_state.toast_timer -= delta_time;
             if self.ui_state.toast_timer <= 0.0 {
                 self.ui_state.toast_message = None;
@@ -132,16 +132,18 @@ impl TemplateApp {
     }
 
     /// Renders the top panel with menu bar
-    fn render_top_panel(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
-        #[cfg(not(target_arch = "wasm32"))] // no File->Quit on web pages!
-        egui::TopBottomPanel::top("top_panel").show(ctx, |ui| {
+    // The whole panel is native-only (no File->Quit on web pages!), so `ui` goes unused on wasm32.
+    #[cfg_attr(target_arch = "wasm32", allow(unused_variables))]
+    fn render_top_panel(&mut self, ui: &mut egui::Ui) {
+        #[cfg(not(target_arch = "wasm32"))]
+        egui::Panel::top("top_panel").show(ui, |ui| {
             // The top panel is often a good place for a menu bar:
-            egui::menu::bar(ui, |ui| {
+            egui::MenuBar::new().ui(ui, |ui| {
                 ui.menu_button("File", |ui| {
                     if ui.button("Open file…").clicked() {
                         if let Some(path) = rfd::FileDialog::new()
                             .add_filter("RDT Files", &["rdt"])
-                            .pick_file() 
+                            .pick_file()
                         {
                             if let Err(e) = self.load_rdt_file(&path) {
                                 self.show_error(format!("Error loading file: {}", e));
@@ -149,7 +151,7 @@ impl TemplateApp {
                         }
                     }
                     if ui.button("Quit").clicked() {
-                        frame.close();
+                        ui.ctx().send_viewport_cmd(egui::ViewportCommand::Close);
                     }
                 });
             });
@@ -157,8 +159,8 @@ impl TemplateApp {
     }
 
     /// Renders the left panel with script selection buttons
-    fn render_script_panel(&mut self, ctx: &egui::Context) {
-        egui::SidePanel::left("file_list_panel").show(ctx, |ui| {
+    fn render_script_panel(&mut self, ui: &mut egui::Ui) {
+        egui::Panel::left("file_list_panel").show(ui, |ui| {
             ui.heading(SCRIPT_LIST_HEADING);
 
             ui.with_layout(egui::Layout::top_down(egui::Align::LEFT), |ui| {
@@ -179,7 +181,7 @@ impl TemplateApp {
                 ui.separator();
 
                 if ui.add(egui::Button::new(COPY_CODE_BUTTON)).clicked() {
-                    ui.output_mut(|o| o.copied_text = String::from(self.ui_state.code_string.join("\n")));
+                    ui.ctx().copy_text(self.ui_state.code_string.join("\n"));
                     self.show_toast("Code copied to clipboard! 📋".to_string());
                 }
             });
@@ -187,8 +189,8 @@ impl TemplateApp {
     }
 
     /// Renders the central panel with code display
-    fn render_code_panel(&mut self, ctx: &egui::Context) {
-        egui::CentralPanel::default().show(ctx, |ui| {
+    fn render_code_panel(&mut self, ui: &mut egui::Ui) {
+        egui::CentralPanel::default().show(ui, |ui| {
             // The central panel the region left after adding TopPanel's and SidePanel's
             ui.heading(format!("{} {}", SOURCE_CODE_HEADING_PREFIX, self.picked_path));
             egui::warn_if_debug_build(ui);
@@ -222,12 +224,11 @@ impl TemplateApp {
             }
 
             egui::ScrollArea::vertical().show(ui, |ui| {
-                ui.style_mut().wrap = Some(false);
+                ui.style_mut().wrap_mode = Some(egui::TextWrapMode::Extend);
 
                 let function_grouping = group_code_into_functions(&self.ui_state.code_string);
 
-                let mut function_num = 0;
-                for current_function in function_grouping.iter() {
+                for (function_num, current_function) in function_grouping.iter().enumerate() {
                     egui::CollapsingHeader::new(format!("{}{}", FUNCTION_HEADING_PREFIX, function_num))
                         .default_open(true)
                         .show(ui, |ui| {
@@ -236,18 +237,17 @@ impl TemplateApp {
                                 current_function.clone(),
                                 KEYWORD_COLOR,
                                 FUNCTION_COLOR,
-                                &self.file_data.as_ref().map(|f| &f.opcode_docs).unwrap_or(&HashMap::new()),
+                                self.file_data.as_ref().map(|f| &f.opcode_docs).unwrap_or(&HashMap::new()),
                             )
                         });
-                    function_num += 1;
                 }
             });
         });
     }
 
     /// Renders the right panel with raw hex values
-    fn render_raw_panel(&mut self, ctx: &egui::Context) {
-        egui::SidePanel::right("raw_code_panel").show(ctx, |ui| {
+    fn render_raw_panel(&mut self, ui: &mut egui::Ui) {
+        egui::Panel::right("raw_code_panel").show(ui, |ui| {
             ui.heading(RAW_HEX_HEADING);
             egui::ScrollArea::both().show(ui, |ui| {
                 ui.label(&self.ui_state.raw_code);
@@ -277,8 +277,9 @@ impl TemplateApp {
 
     /// Called once before the first frame.
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
-        // This is also where you can customize the look and feel of egui using
-        // `cc.egui_ctx.set_visuals` and `cc.egui_ctx.set_fonts`.
+        // Always use dark mode, regardless of the OS theme, matching the look users are used to
+        // (egui's default is now to follow the system theme, which can otherwise come out light).
+        cc.egui_ctx.set_theme(egui::Theme::Dark);
 
         // Load previous app state (if any).
         // Note that you must enable the `persistence` feature for this to work.
@@ -291,22 +292,12 @@ impl TemplateApp {
 }
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
-#[derive(serde::Deserialize, serde::Serialize)]
+#[derive(Default, serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct TemplateApp {
     file_data: Option<RdtFileData>,
     picked_path: String,
     ui_state: UiState,
-}
-
-impl Default for TemplateApp {
-    fn default() -> Self {
-        Self {
-            file_data: None,
-            picked_path: String::new(),
-            ui_state: UiState::default(),
-        }
-    }
 }
 
 impl eframe::App for TemplateApp {
@@ -316,15 +307,17 @@ impl eframe::App for TemplateApp {
     }
 
     /// Called each time the UI needs repainting, which may be many times per second.
-    /// Put your widgets into a `SidePanel`, `TopPanel`, `CentralPanel`, `Window` or `Area`.
-    fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
+    /// Put your widgets into a `Panel`, `CentralPanel`, `Window` or `Area`.
+    fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         // Update toast timer
-        self.update_toast(ctx.input(|i| i.unstable_dt));
+        self.update_toast(ui.ctx().input(|i| i.unstable_dt));
 
-        self.render_top_panel(ctx, frame);
-        self.render_script_panel(ctx);
-        self.render_code_panel(ctx);
-        self.render_raw_panel(ctx);
+        // CentralPanel must always be added last: it consumes all remaining space, so any
+        // Panel added after it gets none.
+        self.render_top_panel(ui);
+        self.render_script_panel(ui);
+        self.render_raw_panel(ui);
+        self.render_code_panel(ui);
     }
 }
 

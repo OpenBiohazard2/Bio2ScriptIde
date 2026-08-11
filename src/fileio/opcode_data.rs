@@ -859,171 +859,171 @@ pub fn init_opcode_info_map() -> HashMap<Opcode, OpcodeInfo> {
 pub fn init_opcode_documentation() -> HashMap<String, String> {
     let opcode_documentation: HashMap<String, String> = HashMap::from([
         (OPCODE_AOT_SET.to_string(), "AotSet(aot: u8, id: u8, type: u8, floor: u8, super: u8, x: i16, z: i16, width: i16, depth: i16, data: u8[6])\n".to_owned() +
-            &"Initialize aot object as a rectangle with a point and dimensions".to_string()),
+            "Initialize aot object as a rectangle with a point and dimensions"),
         (OPCODE_POS_SET.to_string(), "PosSet(dummy: u8, x: i16, y: i16, z: i16)\n".to_owned() +
-            &"Set position of work object".to_string()),
+            "Set position of work object"),
         (OPCODE_SCE_EM_SET.to_string(), "SceEmSet(dummy: u8, aot: u8, id: u8, type: u8, status: u8, floor: u8, soundFlag: u8, modelType: u8, emSetFlag: i8, x: i16, y: i16, z: i16, dirY: u16, motion: u16, ctrFlag: u16)\n".to_owned() +
-            &"Initialize animated entity".to_string()),
+            "Initialize animated entity"),
         (OPCODE_AOT_SET4P.to_string(), "AotSet4p(aot: u8, id: u8, type: u8, floor: u8, super: u8, x1: i16, z1: i16, x2: i16, z2: i16, x3: i16, z3: i16, x4: i16, z4: i16, data: u8[6])\n".to_owned() +
-            &"Initialize aot object with 4 points".to_string()),
+            "Initialize aot object with 4 points"),
         (OPCODE_NO_OP.to_string(), "NoOp()\n".to_owned() +
-            &"No operation".to_string()),
+            "No operation"),
         (OPCODE_EVT_END.to_string(), "EvtEnd()\n".to_owned() +
-            &"End event execution".to_string()),
+            "End event execution"),
         (OPCODE_EVT_NEXT.to_string(), "EvtNext()\n".to_owned() +
-            &"Continue to next event".to_string()),
+            "Continue to next event"),
         (OPCODE_EVT_CHAIN.to_string(), "EvtChain(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Chain to another event".to_string()),
+            "Chain to another event"),
         (OPCODE_EVT_EXEC.to_string(), "EvtExec(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Execute another event".to_string()),
+            "Execute another event"),
         (OPCODE_EVT_KILL.to_string(), "EvtKill(param1: u8)\n".to_owned() +
-            &"Kill an event".to_string()),
+            "Kill an event"),
         (OPCODE_IF_START.to_string(), "IfStart(dummy: u8, block_length: u16)\n".to_owned() +
-            &"Start conditional block".to_string()),
+            "Start conditional block"),
         (OPCODE_ELSE_START.to_string(), "ElseStart(dummy: u8, block_length: u16)\n".to_owned() +
-            &"Start else block".to_string()),
+            "Start else block"),
         (OPCODE_END_IF.to_string(), "EndIf()\n".to_owned() +
-            &"End conditional block".to_string()),
+            "End conditional block"),
         (OPCODE_SLEEP.to_string(), "Sleep(dummy: u8, count: u16)\n".to_owned() +
-            &"Sleep for specified time".to_string()),
+            "Sleep for specified time"),
         (OPCODE_SLEEPING.to_string(), "Sleeping(param1: u8, param2: u8)\n".to_owned() +
-            &"Check if sleeping".to_string()),
+            "Check if sleeping"),
         (OPCODE_WSLEEP.to_string(), "Wsleep()\n".to_owned() +
-            &"Wait sleep".to_string()),
+            "Wait sleep"),
         (OPCODE_WSLEEPING.to_string(), "Wsleeping()\n".to_owned() +
-            &"Check if wait sleeping".to_string()),
+            "Check if wait sleeping"),
         (OPCODE_FOR_START.to_string(), "ForStart(dummy: u8, block_length: u16, count: u16)\n".to_owned() +
-            &"Start for loop".to_string()),
+            "Start for loop"),
         (OPCODE_FOR_END.to_string(), "ForEnd(param1: u8)\n".to_owned() +
-            &"End for loop".to_string()),
+            "End for loop"),
         (OPCODE_WHILE_START.to_string(), "WhileStart(param1: u8, param2: u16)\n".to_owned() +
-            &"Start while loop".to_string()),
+            "Start while loop"),
         (OPCODE_WHILE_END.to_string(), "WhileEnd(param1: u8)\n".to_owned() +
-            &"End while loop".to_string()),
+            "End while loop"),
         (OPCODE_DO_START.to_string(), "DoStart(param1: u8, param2: u16)\n".to_owned() +
-            &"Start do-while loop".to_string()),
+            "Start do-while loop"),
         (OPCODE_DO_END.to_string(), "DoEnd(param1: u8)\n".to_owned() +
-            &"End do-while loop".to_string()),
+            "End do-while loop"),
         (OPCODE_SWITCH.to_string(), "Switch(var_id: u8, block_length: u16)\n".to_owned() +
-            &"Start switch statement".to_string()),
+            "Start switch statement"),
         (OPCODE_CASE.to_string(), "Case(dummy: u8, block_length: u16, value: u16)\n".to_owned() +
-            &"Case in switch statement".to_string()),
+            "Case in switch statement"),
         (OPCODE_END_SWITCH.to_string(), "EndSwitch(param1: u8)\n".to_owned() +
-            &"End switch statement".to_string()),
+            "End switch statement"),
         (OPCODE_GOTO.to_string(), "Goto(if_else_counter: i8, loop_level: i8, unknown: u8, offset: i16)\n".to_owned() +
-            &"Jump to label".to_string()),
+            "Jump to label"),
         (OPCODE_GO_SUB.to_string(), "GoSub(event: u8)\n".to_owned() +
-            &"Call subroutine".to_string()),
+            "Call subroutine"),
         (OPCODE_BREAK.to_string(), "Break(param1: u8)\n".to_owned() +
-            &"Break from loop/switch".to_string()),
+            "Break from loop/switch"),
         (OPCODE_WORK_COPY.to_string(), "WorkCopy(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Copy work values".to_string()),
+            "Copy work values"),
         (OPCODE_CHECK_BIT.to_string(), "CheckBit(bit_array: u8, bit_number: u8, value: u8)\n".to_owned() +
-            &"Check bit flag".to_string()),
+            "Check bit flag"),
         (OPCODE_SET_BIT.to_string(), "SetBit(bit_array: u8, bit_number: u8, operation: u8)\n".to_owned() +
-            &"Set bit flag".to_string()),
+            "Set bit flag"),
         (OPCODE_COMPARE.to_string(), "Compare(dummy: u8, var_id: u8, operation: u8, value: i16)\n".to_owned() +
-            &"Compare values".to_string()),
+            "Compare values"),
         (OPCODE_SAVE.to_string(), "Save(var_id: u8, value: i16)\n".to_owned() +
-            &"Save value".to_string()),
+            "Save value"),
         (OPCODE_COPY.to_string(), "Copy(dest_var_id: u8, source_var_id: u8)\n".to_owned() +
-            &"Copy value".to_string()),
+            "Copy value"),
         (OPCODE_CALC.to_string(), "Calc(dummy: u8, operation: u8, var_id: u8, value: i16)\n".to_owned() +
-            &"Calculate expression".to_string()),
+            "Calculate expression"),
         (OPCODE_SCE_RND.to_string(), "SceRnd()\n".to_owned() +
-            &"Generate random number".to_string()),
+            "Generate random number"),
         (OPCODE_CUT_CHG.to_string(), "CutChg(camera_id: u8)\n".to_owned() +
-            &"Change cutscene".to_string()),
+            "Change cutscene"),
         (OPCODE_CUT_OLD.to_string(), "CutOld()\n".to_owned() +
-            &"Restore old cutscene".to_string()),
+            "Restore old cutscene"),
         (OPCODE_MESSAGE_ON.to_string(), "MessageOn(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8)\n".to_owned() +
-            &"Display message".to_string()),
+            "Display message"),
         (OPCODE_OBJ_MODEL_SET.to_string(), "ObjModelSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u16, param9: u16, param10: i16, param11: i16, param12: i16, param13: i16, param14: i16, param15: i16, param16: i16, param17: i16, param18: i16, param19: i16, param20: i16, param21: u16, param22: u16, param23: u16)\n".to_owned() +
-            &"Set object model".to_string()),
+            "Set object model"),
         (OPCODE_WORK_SET.to_string(), "WorkSet(component: u8, index: u8)\n".to_owned() +
-            &"Set work value".to_string()),
+            "Set work value"),
         (OPCODE_SPEED_SET.to_string(), "SpeedSet(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Set speed".to_string()),
+            "Set speed"),
         (OPCODE_ADD_SPEED.to_string(), "AddSpeed()\n".to_owned() +
-            &"Add to speed".to_string()),
+            "Add to speed"),
         (OPCODE_ADD_ASPEED.to_string(), "AddAspeed()\n".to_owned() +
-            &"Add to angular speed".to_string()),
+            "Add to angular speed"),
         (OPCODE_DIR_SET.to_string(), "DirSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8)\n".to_owned() +
-            &"Set direction".to_string()),
+            "Set direction"),
         (OPCODE_MEMBER_SET.to_string(), "MemberSet(member_index: u8, value: u16)\n".to_owned() +
-            &"Set member value".to_string()),
+            "Set member value"),
         (OPCODE_MEMBER_SET2.to_string(), "MemberSet2(param1: u8, param2: u8)\n".to_owned() +
-            &"Set member value (variant 2)".to_string()),
+            "Set member value (variant 2)"),
         (OPCODE_SE_ON.to_string(), "SeOn(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u8, param9: u8, param10: u8, param11: u8)\n".to_owned() +
-            &"Play sound effect".to_string()),
+            "Play sound effect"),
         (OPCODE_SCA_ID_SET.to_string(), "ScaIdSet(id: u8, flag: u16)\n".to_owned() +
-            &"Set scale ID".to_string()),
+            "Set scale ID"),
         (OPCODE_DIR_CK.to_string(), "DirCk(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8)\n".to_owned() +
-            &"Check direction".to_string()),
+            "Check direction"),
         (OPCODE_SCE_ESPR_ON.to_string(), "SceEsprOn(param1: u8, param2: u8, param3: u8, param4: u16, param5: i16, param6: i16, param7: i16, param8: i16, param9: u16)\n".to_owned() +
-            &"Enable sprite effect".to_string()),
+            "Enable sprite effect"),
         (OPCODE_DOOR_AOT_SET.to_string(), "DoorAotSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: i16, param7: i16, param8: i16, param9: i16, param10: i16, param11: i16, param12: i16, param13: i16, param14: u8, param15: u8, param16: u8, param17: u8, param18: u8, param19: u8, param20: u8, param21: u8, param22: u8, param23: u8)\n".to_owned() +
-            &"Set door area of trigger".to_string()),
+            "Set door area of trigger"),
         (OPCODE_CUT_AUTO.to_string(), "CutAuto(param1: u8)\n".to_owned() +
-            &"Auto cutscene".to_string()),
+            "Auto cutscene"),
         (OPCODE_MEMBER_COPY.to_string(), "MemberCopy(param1: u8, param2: u8)\n".to_owned() +
-            &"Copy member value".to_string()),
+            "Copy member value"),
         (OPCODE_MEMBER_CMP.to_string(), "MemberCmp(param1: u8, param2: u8, param3: u8, param4: i16)\n".to_owned() +
-            &"Compare member values".to_string()),
+            "Compare member values"),
         (OPCODE_PLC_MOTION.to_string(), "PlcMotion(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Set player motion".to_string()),
+            "Set player motion"),
         (OPCODE_PLC_DEST.to_string(), "PlcDest(param1: u8, param2: u8, param3: u8, param4: i16, param5: i16)\n".to_owned() +
-            &"Set player destination".to_string()),
+            "Set player destination"),
         (OPCODE_PLC_NECK.to_string(), "PlcNeck(param1: u8, param2: i16, param3: i16, param4: i16, param5: i8, param6: i8)\n".to_owned() +
-            &"Set player neck direction".to_string()),
+            "Set player neck direction"),
         (OPCODE_PLC_RET.to_string(), "PlcRet()\n".to_owned() +
-            &"Return player".to_string()),
+            "Return player"),
         (OPCODE_AOT_RESET.to_string(), "AotReset(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u8, param9: u8)\n".to_owned() +
-            &"Reset area of trigger".to_string()),
+            "Reset area of trigger"),
         (OPCODE_AOT_ON.to_string(), "AotOn(param1: u8)\n".to_owned() +
-            &"Enable area of trigger".to_string()),
+            "Enable area of trigger"),
         (OPCODE_CUT_REPLACE.to_string(), "CutReplace(param1: u8, param2: u8)\n".to_owned() +
-            &"Replace cutscene".to_string()),
+            "Replace cutscene"),
         (OPCODE_SCE_ESPR_KILL.to_string(), "SceEsprKill(param1: u8, param2: u8, param3: u8, param4: u8)\n".to_owned() +
-            &"Kill sprite effect".to_string()),
+            "Kill sprite effect"),
         (OPCODE_ITEM_AOT_SET.to_string(), "ItemAotSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: i16, param7: i16, param8: i16, param9: i16, param10: u16, param11: u16, param12: u16, param13: u8, param14: u8)\n".to_owned() +
-            &"Set item area of trigger".to_string()),
+            "Set item area of trigger"),
         (OPCODE_SCE_BGM_CONTROL.to_string(), "SceBgmControl(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8)\n".to_owned() +
-            &"Control background music".to_string()),
+            "Control background music"),
         (OPCODE_SCE_ESPR3D_ON.to_string(), "SceEspr3dOn(param1: u8, param2: u16, param3: u16, param4: u16, param5: i16, param6: i16, param7: i16, param8: i16, param9: i16, param10: i16, param11: u16)\n".to_owned() +
-            &"Enable 3D sprite effect".to_string()),
+            "Enable 3D sprite effect"),
         (OPCODE_SCE_BGMTBL_SET.to_string(), "SceBgmtblSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8)\n".to_owned() +
-            &"Set background music table".to_string()),
+            "Set background music table"),
         (OPCODE_PLC_ROT.to_string(), "PlcRot(param1: u8, param2: i16)\n".to_owned() +
-            &"Rotate player".to_string()),
+            "Rotate player"),
         (OPCODE_XA_ON.to_string(), "XaOn(param1: u8, param2: i16)\n".to_owned() +
-            &"Enable XA audio".to_string()),
+            "Enable XA audio"),
         (OPCODE_PLC_CNT.to_string(), "PlcCnt(param1: u8)\n".to_owned() +
-            &"Set player count".to_string()),
+            "Set player count"),
         (OPCODE_MIZU_DIV_SET.to_string(), "MizuDivSet(param1: u8)\n".to_owned() +
-            &"Set water division".to_string()),
+            "Set water division"),
         (OPCODE_XA_VOL.to_string(), "XaVol(param1: u8)\n".to_owned() +
-            &"Set XA volume".to_string()),
+            "Set XA volume"),
         (OPCODE_KAGE_SET.to_string(), "KageSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: i16, param7: i16, param8: i16, param9: i16)\n".to_owned() +
-            &"Set shadow".to_string()),
+            "Set shadow"),
         (OPCODE_CUT_BE_SET.to_string(), "CutBeSet(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Set cutscene behavior".to_string()),
+            "Set cutscene behavior"),
         (OPCODE_SCE_ITEM_LOST.to_string(), "SceItemLost(param1: u8)\n".to_owned() +
-            &"Item lost event".to_string()),
+            "Item lost event"),
         (OPCODE_SCE_ESPR_ON2.to_string(), "SceEsprOn2(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u8, param9: u8, param10: u8, param11: u8, param12: u8, param13: u8, param14: u8, param15: u8)\n".to_owned() +
-            &"Enable sprite effect (variant 2)".to_string()),
+            "Enable sprite effect (variant 2)"),
         (OPCODE_PLC_STOP.to_string(), "PlcStop()\n".to_owned() +
-            &"Stop player".to_string()),
+            "Stop player"),
         (OPCODE_LIGHT_POS_SET.to_string(), "LightPosSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8)\n".to_owned() +
-            &"Set light position".to_string()),
+            "Set light position"),
         (OPCODE_LIGHT_KIDO_SET.to_string(), "LightKidoSet(param1: u8, param2: u8, param3: u8)\n".to_owned() +
-            &"Set light intensity".to_string()),
+            "Set light intensity"),
         (OPCODE_PARTS_SET.to_string(), "PartsSet(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8)\n".to_owned() +
-            &"Set parts".to_string()),
+            "Set parts"),
         (OPCODE_SCE_PARTS_BOMB.to_string(), "ScePartsBomb(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u8, param9: u8, param10: u8, param11: u8, param12: u8, param13: u8, param14: u8, param15: u8)\n".to_owned() +
-            &"Parts bomb event".to_string()),
+            "Parts bomb event"),
         (OPCODE_SCE_PARTS_DOWN.to_string(), "ScePartsDown(param1: u8, param2: u8, param3: u8, param4: u8, param5: u8, param6: u8, param7: u8, param8: u8, param9: u8, param10: u8, param11: u8, param12: u8, param13: u8, param14: u8, param15: u8)\n".to_owned() +
-            &"Parts down event".to_string()),
+            "Parts down event"),
     ]);
     opcode_documentation
 }
