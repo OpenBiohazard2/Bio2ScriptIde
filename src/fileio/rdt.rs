@@ -56,3 +56,55 @@ impl RDTHeader {
         })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Builds a minimal valid 100-byte RDT header: the 8 counter bytes followed by 23
+    /// little-endian u32 offsets, defaulting to zero except where overridden.
+    fn header_bytes(counters: [u8; 8], offset_overrides: &[(usize, u32)]) -> Vec<u8> {
+        let mut bytes = counters.to_vec();
+        let mut offsets = [0u32; 23];
+        for &(i, value) in offset_overrides {
+            offsets[i] = value;
+        }
+        for offset in offsets {
+            bytes.extend_from_slice(&offset.to_le_bytes());
+        }
+        bytes
+    }
+
+    #[test]
+    fn parses_counters_and_offsets() {
+        let bytes = header_bytes([1, 2, 3, 4, 5, 6, 7, 8], &[(16, 0x1234), (17, 0xabcd)]);
+        let header = RDTHeader::from(&bytes).unwrap();
+
+        assert_eq!(header.num_sprites, 1);
+        assert_eq!(header.num_cameras, 2);
+        assert_eq!(header.num_models, 3);
+        assert_eq!(header.num_items, 4);
+        assert_eq!(header.num_doors, 5);
+        assert_eq!(header.num_rooms, 6);
+        assert_eq!(header.num_reverb, 7);
+        assert_eq!(header.sprite_max, 8);
+        assert_eq!(header.offsets[16], 0x1234);
+        assert_eq!(header.offsets[17], 0xabcd);
+        assert_eq!(header.offsets.len(), 23);
+    }
+
+    #[test]
+    fn rejects_input_shorter_than_min_size() {
+        let bytes = header_bytes([0; 8], &[]);
+        // One byte short of the required 100.
+        assert!(RDTHeader::from(&bytes[..bytes.len() - 1]).is_err());
+        assert!(RDTHeader::from(&[]).is_err());
+    }
+
+    #[test]
+    fn accepts_exactly_min_size() {
+        let bytes = header_bytes([0; 8], &[]);
+        assert_eq!(bytes.len(), 100);
+        assert!(RDTHeader::from(&bytes).is_ok());
+    }
+}

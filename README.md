@@ -35,3 +35,43 @@ The center panel shows the corresponding pseudocode that contains a function nam
 ## Opcode Reference
 
 For a complete reference of all available opcodes, their parameters, and data types, see [OPCODES.md](OPCODES.md).
+
+## Development
+
+This is a native [egui](https://github.com/emilk/egui)/[eframe](https://github.com/emilk/egui/tree/master/crates/eframe) app, with an optional web build via [Trunk](https://trunkrs.dev/). It requires a recent Rust toolchain (see `rust-version` in [Cargo.toml](Cargo.toml)) — install/update via [rustup](https://rustup.rs/):
+
+```bash
+rustup update stable
+```
+
+### Build and run natively
+
+```bash
+cargo run
+```
+
+### Run the tests
+
+```bash
+cargo test
+```
+
+### Lint and format
+
+```bash
+cargo clippy --all-targets
+cargo fmt --all
+```
+
+### Build for the web
+
+Requires the `wasm32-unknown-unknown` target and [Trunk](https://trunkrs.dev/):
+
+```bash
+rustup target add wasm32-unknown-unknown
+cargo install trunk
+trunk serve   # serves locally with hot reload
+trunk build   # produces a release build in dist/
+```
+
+[`check.sh`](check.sh) runs everything CI checks (check, wasm check, fmt, clippy, tests, and a trunk build) in one go.

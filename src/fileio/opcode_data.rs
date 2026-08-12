@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use num_derive::FromPrimitive;
+use std::collections::HashMap;
 
 // Opcode name constants
 pub const OPCODE_NO_OP: &str = "NoOp";
